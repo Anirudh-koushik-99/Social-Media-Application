@@ -8,7 +8,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
-import { error } from "console";
+import authRoutes from "./routes/authRoutes.js"
 import {register} from "./controller/auth.js"
 
 /*CONFIGURATIONS*/
@@ -37,7 +37,11 @@ const storage = multer.diskStorage({
 const upload = multer({storage});
 
 /*ROUTES WITH FILES*/
+// this route requires the upload variable to perform the upload operation hence cannot be moved into a separate route file//
 app.post("/auth/register", upload.single("picture"), register)
+
+/*ROUTES*/
+app.use("/auth", authRoutes)
 
 /*MONGOOSE SETUP*/
 const PORT = process.env.PORT || 6001
