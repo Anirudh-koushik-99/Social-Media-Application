@@ -9,7 +9,11 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/authRoutes.js"
+import userRoutes from "./routes/userRoutes.js"
+import postRoutes from "./routes/postRoutes.js"
 import {register} from "./controller/auth.js"
+import {createPost} from "./controller/posts.js"
+import { verifyToken } from "./middleware/authMiddleware.js";
 
 /*CONFIGURATIONS*/
 const __filename = fileURLToPath(import.meta.url);
@@ -39,9 +43,12 @@ const upload = multer({storage});
 /*ROUTES WITH FILES*/
 // this route requires the upload variable to perform the upload operation hence cannot be moved into a separate route file//
 app.post("/auth/register", upload.single("picture"), register)
+app.post("/posts", verifyToken, upload.single("picture"), createPost)
 
 /*ROUTES*/
 app.use("/auth", authRoutes)
+app.use("/user", userRoutes)
+app.use("/posts", postRoutes)
 
 /*MONGOOSE SETUP*/
 const PORT = process.env.PORT || 6001
