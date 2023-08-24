@@ -8,12 +8,15 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
-import authRoutes from "./routes/authRoutes.js"
-import userRoutes from "./routes/userRoutes.js"
-import postRoutes from "./routes/postRoutes.js"
-import {register} from "./controller/auth.js"
-import {createPost} from "./controller/posts.js"
+import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
+import { register } from "./controller/auth.js";
+import { createPost } from "./controller/posts.js";
 import { verifyToken } from "./middleware/authMiddleware.js";
+import User from "./models/User.js";
+import Post from "./models/Post.js";
+import { users, posts } from "./data/index.js";
 
 /*CONFIGURATIONS*/
 const __filename = fileURLToPath(import.meta.url);
@@ -27,34 +30,40 @@ app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
-app.use("/assets", express.static(path.join(__dirname, 'public/assets')))
+app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 /*FILE STORAGE*/
 const storage = multer.diskStorage({
-    destination: function(req, file, cb){
-        cb(null, "public/assets");
-    },
-    filename: function(req, file, cb){
-        cb(null, file.originalname);
-    }
+  destination: function (req, file, cb) {
+    cb(null, "public/assets");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
 });
-const upload = multer({storage});
+const upload = multer({ storage });
 
 /*ROUTES WITH FILES*/
 // this route requires the upload variable to perform the upload operation hence cannot be moved into a separate route file//
-app.post("/auth/register", upload.single("picture"), register)
-app.post("/posts", verifyToken, upload.single("picture"), createPost)
+app.post("/auth/register", upload.single("picture"), register);
+app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
 /*ROUTES*/
-app.use("/auth", authRoutes)
-app.use("/user", userRoutes)
-app.use("/posts", postRoutes)
+app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
+app.use("/posts", postRoutes);
 
 /*MONGOOSE SETUP*/
-const PORT = process.env.PORT || 6001
-mongoose.connect(process.env.MONGO_URL,{
+const PORT = process.env.PORT || 6001;
+mongoose
+  .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-}).then(() => {
-    app.listen(PORT, () => console.log(`Server Port : ${PORT}`))
-}).catch((error) => console.log(`${error} did not connect`))
+  })
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server Port : ${PORT}`));
+    /*ADD DATA ONLY ONE TIME*/
+   /* User.insertMany(users);
+    Post.insertMany(posts);*/
+  })
+  .catch((error) => console.log(`${error} did not connect`));
