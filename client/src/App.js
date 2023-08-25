@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import HomePage from "screens/homePage";
-import LoginPage from "screens/loginPage";
-import ProfilePage from "screens/profilePage";
-import Navbar from "screens/navbar";
+import HomePage from "./screens/homePage";
+import LoginPage from "./screens/loginPage";
+import ProfilePage from "./screens/profilePage";
+
 
 
 function App() {
