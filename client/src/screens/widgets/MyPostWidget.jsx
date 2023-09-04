@@ -1,4 +1,3 @@
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -18,12 +17,12 @@ import {
   IconButton,
   useMediaQuery,
 } from "@mui/material";
-import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
+import Dropzone from "react-dropzone";
 import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 
 const MyPostWidget = ({ picturePath }) => {
@@ -46,6 +45,7 @@ const MyPostWidget = ({ picturePath }) => {
       formData.append("picture", image);
       formData.append("picturePath", image.name);
     }
+
     const response = await fetch(`http://localhost:3001/posts`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
@@ -62,26 +62,26 @@ const MyPostWidget = ({ picturePath }) => {
       <FlexBetween gap="1.5rem">
         <UserImage image={picturePath} />
         <InputBase
-          placeholder="What's on your mind"
+          placeholder="What's on your mind..."
           onChange={(e) => setPost(e.target.value)}
           value={post}
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,
             borderRadius: "2rem",
-            padding: "1rem 2 rem",
+            padding: "1rem 2rem",
           }}
         />
       </FlexBetween>
       {isImage && (
         <Box
-          borderRadius="5px"
           border={`1px solid ${medium}`}
+          borderRadius="5px"
           mt="1rem"
           p="1rem"
         >
           <Dropzone
-            acceptedFiles=".jpg, .jpeg, ..png"
+            acceptedFiles=".jpg,.jpeg,.png"
             multiple={false}
             onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
           >
@@ -92,15 +92,15 @@ const MyPostWidget = ({ picturePath }) => {
                   border={`2px dashed ${palette.primary.main}`}
                   p="1rem"
                   width="100%"
-                  sx={{ "& : hover": { cursor: "pointer" } }}
+                  sx={{ "&:hover": { cursor: "pointer" } }}
                 >
                   <input {...getInputProps()} />
-                  {!image.name ? (
+                  {!image ? (
                     <p>Add Image Here</p>
                   ) : (
                     <FlexBetween>
                       <Typography>{image.name}</Typography>
-                      <EditOutlinedIcon />
+                      <EditOutlined />
                     </FlexBetween>
                   )}
                 </Box>
@@ -117,6 +117,7 @@ const MyPostWidget = ({ picturePath }) => {
           </Dropzone>
         </Box>
       )}
+
       <Divider sx={{ margin: "1.25rem 0" }} />
 
       <FlexBetween>
@@ -124,34 +125,33 @@ const MyPostWidget = ({ picturePath }) => {
           <ImageOutlined sx={{ color: mediumMain }} />
           <Typography
             color={mediumMain}
-            sx={{ "&: hover": { cursor: "pointer", color: medium } }}
+            sx={{ "&:hover": { cursor: "pointer", color: medium } }}
           >
             Image
           </Typography>
         </FlexBetween>
+
         {isNonMobileScreens ? (
           <>
-            <FlexBetween gap={"0.25rem"}>
+            <FlexBetween gap="0.25rem">
               <GifBoxOutlined sx={{ color: mediumMain }} />
               <Typography color={mediumMain}>Clip</Typography>
             </FlexBetween>
 
-            <FlexBetween gap={"0.25rem"}>
+            <FlexBetween gap="0.25rem">
               <AttachFileOutlined sx={{ color: mediumMain }} />
               <Typography color={mediumMain}>Attachment</Typography>
             </FlexBetween>
 
-            <FlexBetween gap={"0.25rem"}>
+            <FlexBetween gap="0.25rem">
               <MicOutlined sx={{ color: mediumMain }} />
               <Typography color={mediumMain}>Audio</Typography>
             </FlexBetween>
           </>
         ) : (
-          <>
-            <FlexBetween gap={"0.25rem"}>
-              <MoreHorizOutlined sx={{ color: mediumMain }} />
-            </FlexBetween>
-          </>
+          <FlexBetween gap="0.25rem">
+            <MoreHorizOutlined sx={{ color: mediumMain }} />
+          </FlexBetween>
         )}
 
         <Button
