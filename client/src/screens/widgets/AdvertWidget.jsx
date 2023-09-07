@@ -18,7 +18,7 @@ const AdvertWidget = () => {
                     Create Ad
                 </Typography>
             </FlexBetween>
-            <img src="http://localhost:3001/assets/info4.jpg" alt="advert" width="100%" height="auto" style={{borderRadius: "0.75rem", margin: "0.75rem 0"}}/>
+            <img src="http://localhost:3001/assets/info4.jpeg" alt="advert" width="100%" height="auto" style={{borderRadius: "0.75rem", margin: "0.75rem 0"}}/>
             <FlexBetween>
                 <Typography color={main}>
                     Advert 1 !!!!
